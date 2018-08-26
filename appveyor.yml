@@ -1,0 +1,18 @@
+version: '0.1.{build}'
+image: Visual Studio 2017
+branches:
+  only:
+  - master
+init:
+  # Good practise, because Windows line endings are different from Unix/Linux ones
+  - cmd: git config --global core.autocrlf true
+before_build:
+  - cmd: dotnet --version
+build_script:
+  - cmd: dotnet build ./src
+after_build:
+  # For once the build has completed
+clone_depth: 1
+test_script:
+  - cmd: dotnet test .\src\PathEditor.Test\
+deploy: off
