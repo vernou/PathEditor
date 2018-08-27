@@ -1,0 +1,14 @@
+version: '0.1.{build}'
+image: Visual Studio 2017
+branches:
+  only:
+  - master
+init:
+  # Good practise, because Windows line endings are different from Unix/Linux ones
+  - cmd: git config --global core.autocrlf true
+clone_depth: 1
+build:
+  project: .\src\PathEditor.sln
+before_build:
+  - nuget restore .\src\PathEditor.sln
+deploy: off

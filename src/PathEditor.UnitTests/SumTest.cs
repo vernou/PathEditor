@@ -10,11 +10,5 @@ namespace PathEditor.UnitTests
         {
             Assert.Equal(7, new Sum(3, 4).AsInteger());
         }
-
-        [Fact]
-        public void FailTest()
-        {
-            Assert.Equal(5, new Sum(3, 4).AsInteger());
-        }
     }
 }
