@@ -7,8 +7,13 @@ init:
   # Good practise, because Windows line endings are different from Unix/Linux ones
   - cmd: git config --global core.autocrlf true
 clone_depth: 1
+before_build:
+  - cmd: choco install opencover.portable
+  - cmd: choco install codecov
+  - nuget restore .\src\PathEditor.sln
 build:
   project: .\src\PathEditor.sln
-before_build:
-  - nuget restore .\src\PathEditor.sln
+after_test:
+  - cmd: OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"test ./src/PathEditor.Test" -output:".\PathEditor_coverage.xml" -oldstyle
+  - cmd: codecov -f "PathEditor_coverage.xml" -t %xunit20%\xunit.console.x86.exe
 deploy: off
