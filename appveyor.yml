@@ -14,6 +14,6 @@ before_build:
 build:
   project: .\src\PathEditor.sln
 after_test:
-  - cmd: OpenCover.Console.exe -register:user -target:"%xunit20%\xunit.console.x86.exe" -targetargs:"test ./src/PathEditor.Test" -output:".\PathEditor_coverage.xml" -oldstyle
+  - cmd: OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test ./src/PathEditor.Test" -output:".\PathEditor_coverage.xml" -oldstyle
   - cmd: codecov -f "PathEditor_coverage.xml" -t %xunit20%\xunit.console.x86.exe
 deploy: off
