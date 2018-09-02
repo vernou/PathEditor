@@ -24,7 +24,7 @@ namespace PathEditor.App
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel(new EnvironmentVariablePathSystem());
+            DataContext = new MainWindowViewModel(new EnvironmentVariablePathInMemory());
         }
     }
 }
