@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PathEditor.Core
+﻿namespace PathEditor.Core
 {
     public interface IEnvironmentVariablePath
     {
-        string Value { get; }
+        string Value { get; set; }
     }
 }

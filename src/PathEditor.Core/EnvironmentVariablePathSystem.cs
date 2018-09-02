@@ -6,6 +6,10 @@ namespace PathEditor.Core
 {
     public sealed class EnvironmentVariablePathSystem : IEnvironmentVariablePath
     {
-        public string Value => Environment.GetEnvironmentVariable("Path");
+        public string Value
+        {
+            get => Environment.GetEnvironmentVariable("Path");
+            set => throw new NotImplementedException();
+        }
     }
 }
