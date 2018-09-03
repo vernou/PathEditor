@@ -13,7 +13,7 @@ namespace PathEditor.UnitTests
         {
             yield return new object[] { string.Empty, string.Empty };
             yield return new object[] { @"C:\TMP\Path1;C:\TMP\Path2;C:\TMP\Path3", $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;{Environment.NewLine}C:\TMP\Path3;" };
-            yield return new object[] { @"C:\TMP\Path1;C:\TMP\Path2;C:\TMP\Path3;", $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;{Environment.NewLine}C:\TMP\Path3;"};
+            yield return new object[] { @"C:\TMP\Path1;C:\TMP\Path2;C:\TMP\Path3;", $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;{Environment.NewLine}C:\TMP\Path3;" };
         }
 
         [Theory]
@@ -36,8 +36,7 @@ namespace PathEditor.UnitTests
 
         [Theory]
         [MemberData(nameof(SaveData))]
-        public void Sage(string formatedPath, string path)
-        public void Apply(string formatedPath, string path)
+        public void Save(string formatedPath, string path)
         {
             var evpim = new EnvironmentVariablePathInMemory();
             new MainWindowViewModel(evpim).SaveCommand.Execute(formatedPath);
