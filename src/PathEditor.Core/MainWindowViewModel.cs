@@ -22,7 +22,7 @@ namespace PathEditor.Core
             get => _formatedPath ?? (_formatedPath = FormatPath(_environmentVariablePath.Value));
             set
             {
-                _formatedPath = AutoBreakLine(value);
+                _formatedPath = RemoveBreakLine(AutoBreakLine(value));
                 OnPropertyChanged();
             }
         }
@@ -60,7 +60,7 @@ namespace PathEditor.Core
         private string AutoBreakLine(string edited)
         {
             if(edited == string.Empty)
-                return edited;
+                return string.Empty;
             for (var separatorIndex = edited.IndexOf(';'); separatorIndex != -1; separatorIndex = edited.IndexOf(';', separatorIndex + 1))
             {
                 if ((separatorIndex+1) != edited.Length && edited.IndexOf(Environment.NewLine, separatorIndex) != separatorIndex + 1)
@@ -68,6 +68,18 @@ namespace PathEditor.Core
                     edited = edited.Insert(separatorIndex+1, Environment.NewLine);
                     separatorIndex += Environment.NewLine.Length;
                 }
+            }
+            return edited;
+        }
+
+        private string RemoveBreakLine(string edited)
+        {
+            if (edited == string.Empty)
+                return string.Empty;
+            for (var separatorIndex = edited.IndexOf(Environment.NewLine); separatorIndex != -1; separatorIndex = edited.IndexOf(Environment.NewLine, separatorIndex + Environment.NewLine.Length))
+            {
+                if (separatorIndex == 0 || edited[separatorIndex-1] != ';')
+                    edited = edited.Remove(separatorIndex, Environment.NewLine.Length);
             }
             return edited;
         }

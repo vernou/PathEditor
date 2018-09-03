@@ -48,6 +48,10 @@ namespace PathEditor.UnitTests
             yield return new object[] { string.Empty, string.Empty };
             yield return new object[] { $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;", $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;" };
             yield return new object[] { $@"C:\TMP\Path1;C:\TMP\Path2;", $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;" };
+            yield return new object[] {
+                $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2{Environment.NewLine}C:\TMP\Path3;{Environment.NewLine}C:\TMP\Path4;",
+                $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2C:\TMP\Path3;{Environment.NewLine}C:\TMP\Path4;"
+            };
         }
 
         [Theory]
