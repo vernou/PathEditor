@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.PortableExecutable;
@@ -37,6 +37,7 @@ namespace PathEditor.UnitTests
         [Theory]
         [MemberData(nameof(SaveData))]
         public void Sage(string formatedPath, string path)
+        public void Apply(string formatedPath, string path)
         {
             var evpim = new EnvironmentVariablePathInMemory();
             new MainWindowViewModel(evpim).SaveCommand.Execute(formatedPath);
