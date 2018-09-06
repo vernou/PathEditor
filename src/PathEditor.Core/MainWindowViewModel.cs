@@ -7,9 +7,8 @@ using System.Windows.Input;
 
 namespace PathEditor.Core
 {
-    public sealed class MainWindowViewModel : INotifyPropertyChanged
+    public sealed class MainWindowViewModel
     {
-        private string _formatedPath;
         private readonly IEnvironmentVariablePath _environmentVariablePath;
 
         public MainWindowViewModel(IEnvironmentVariablePath environmentVariablePath)
@@ -19,12 +18,7 @@ namespace PathEditor.Core
 
         public string Path
         {
-            get => _formatedPath ?? (_formatedPath = FormatPath(_environmentVariablePath.Value));
-            set
-            {
-                _formatedPath = RemoveBreakLine(AutoBreakLine(value));
-                OnPropertyChanged();
-            }
+            get =>  FormatPath(_environmentVariablePath.Value);
         }
 
         public ICommand SaveCommand => new RelayCommand(Save);
@@ -55,40 +49,6 @@ namespace PathEditor.Core
             if (raw.Last() != ';')
                 raw += ';';
             return raw;
-        }
-
-        private string AutoBreakLine(string edited)
-        {
-            if(edited == string.Empty)
-                return string.Empty;
-            for (var separatorIndex = edited.IndexOf(';'); separatorIndex != -1; separatorIndex = edited.IndexOf(';', separatorIndex + 1))
-            {
-                if ((separatorIndex+1) != edited.Length && edited.IndexOf(Environment.NewLine, separatorIndex) != separatorIndex + 1)
-                {
-                    edited = edited.Insert(separatorIndex+1, Environment.NewLine);
-                    separatorIndex += Environment.NewLine.Length;
-                }
-            }
-            return edited;
-        }
-
-        private string RemoveBreakLine(string edited)
-        {
-            if (edited == string.Empty)
-                return string.Empty;
-            for (var separatorIndex = edited.IndexOf(Environment.NewLine); separatorIndex != -1; separatorIndex = edited.IndexOf(Environment.NewLine, separatorIndex + Environment.NewLine.Length))
-            {
-                if (separatorIndex == 0 || edited[separatorIndex-1] != ';')
-                    edited = edited.Remove(separatorIndex, Environment.NewLine.Length);
-            }
-            return edited;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

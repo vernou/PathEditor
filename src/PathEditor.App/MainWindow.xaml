@@ -11,7 +11,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox Name="PathTextBox" Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <TextBox Name="PathTextBox" Text="{Binding Path, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged"/>
         <Button Grid.Row="1" Command="{Binding SaveCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=PathTextBox, Path=Text}">Save</Button>
     </Grid>
 </Window>

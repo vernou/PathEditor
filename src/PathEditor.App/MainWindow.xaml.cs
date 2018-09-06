@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PathEditor.Core;
+using PathEditor.Core.Paper;
 
 namespace PathEditor.App
 {
@@ -25,6 +26,13 @@ namespace PathEditor.App
         {
             InitializeComponent();
             DataContext = new MainWindowViewModel(new EnvironmentVariablePathInMemory());
+        }
+
+        private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var paper = new WihoutFakeBreakLine(new AutoBreakLine(new TextOf(((TextBox)sender).Text, ((TextBox)sender).SelectionStart)));
+            ((TextBox) sender).Text = paper.Text;
+            ((TextBox) sender).SelectionStart = paper.Cursor;
         }
     }
 }
