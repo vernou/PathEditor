@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PathEditor.Core;
+using PathEditor.Core.EnvironmentVariablePath;
 using PathEditor.Core.Paper;
 
 namespace PathEditor.App

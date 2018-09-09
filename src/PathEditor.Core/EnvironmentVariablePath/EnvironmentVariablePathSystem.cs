@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PathEditor.Core
+namespace PathEditor.Core.EnvironmentVariablePath
 {
     public sealed class EnvironmentVariablePathSystem : IEnvironmentVariablePath
     {
