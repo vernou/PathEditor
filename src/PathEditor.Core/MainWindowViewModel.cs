@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using PathEditor.Core.EnvironmentVariablePath;
 
 namespace PathEditor.Core
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using PathEditor.Core;
+using PathEditor.Core.EnvironmentVariablePath;
 using Xunit;
 
 namespace PathEditor.UnitTests

@@ -1,4 +1,4 @@
-﻿namespace PathEditor.Core
+﻿namespace PathEditor.Core.EnvironmentVariablePath
 {
     public interface IEnvironmentVariablePath
     {
