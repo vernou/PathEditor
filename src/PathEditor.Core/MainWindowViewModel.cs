@@ -1,9 +1,8 @@
 using System;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using PathEditor.Core.Backup;
+using PathEditor.Core.Dialog;
 using PathEditor.Core.EnvironmentVariablePath;
 
 namespace PathEditor.Core
@@ -11,16 +10,15 @@ namespace PathEditor.Core
     public sealed class MainWindowViewModel
     {
         private readonly IEnvironmentVariablePath _environmentVariablePath;
+        private readonly IBackup _backup;
 
-        public MainWindowViewModel(IEnvironmentVariablePath environmentVariablePath)
+        public MainWindowViewModel(IEnvironmentVariablePath environmentVariablePath, IBackup backup)
         {
             _environmentVariablePath = environmentVariablePath;
+            _backup = backup;
         }
 
-        public string Path
-        {
-            get =>  FormatPath(_environmentVariablePath.Value);
-        }
+        public string Path => FormatPath(_environmentVariablePath.Value);
 
         public ICommand SaveCommand => new RelayCommand(Save);
 
@@ -28,6 +26,16 @@ namespace PathEditor.Core
         {
             if (o is string formated)
             {
+                switch (_backup.Save(_environmentVariablePath.Value))
+                {
+                    case SaveBackupResult.Done:
+                        break;
+                    case SaveBackupResult.Cancel:
+                        throw new InvalidOperationException("Backup is canceled.");
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 var raw = ParsePath(formated);
                 _environmentVariablePath.Value = raw;
             }

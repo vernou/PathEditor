@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PathEditor.Core;
+using PathEditor.Core.Backup;
+using PathEditor.Core.Dialog;
 using PathEditor.Core.EnvironmentVariablePath;
 using Xunit;
 
@@ -21,7 +24,8 @@ namespace PathEditor.UnitTests
         {
             Assert.Equal(formatedPath,
                 new MainWindowViewModel(
-                    new EnvironmentVariablePathInMemory(path)
+                    new EnvironmentVariablePathInMemory(path),
+                    new BackupFake(SaveBackupResult.Cancel)
                 ).Path
             );
         }
@@ -38,7 +42,10 @@ namespace PathEditor.UnitTests
         public void Save(string formatedPath, string path)
         {
             var evpim = new EnvironmentVariablePathInMemory();
-            new MainWindowViewModel(evpim).SaveCommand.Execute(formatedPath);
+            new MainWindowViewModel(
+                evpim,
+                new BackupFake(SaveBackupResult.Done)
+            ).SaveCommand.Execute(formatedPath);
             Assert.Equal(path, evpim.Value);
         }
     }
