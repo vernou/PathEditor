@@ -43,5 +43,16 @@ namespace PathEditor.App
             ((TextBox) sender).Text = paper.Text;
             ((TextBox) sender).SelectionStart = paper.Cursor;
         }
+
+        private void TextBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.D && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+            {
+                var paper = new WithoutCurrentLine(new TextOf(((TextBox)sender).Text, ((TextBox)sender).SelectionStart));
+                ((TextBox)sender).Text = paper.Text;
+                ((TextBox)sender).SelectionStart = paper.Cursor;
+                e.Handled = true;
+            }
+        }
     }
 }
