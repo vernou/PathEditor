@@ -25,8 +25,9 @@ namespace PathEditor.UnitTests
             Assert.Equal(formatedPath,
                 new MainWindowViewModel(
                     new EnvironmentVariablePathInMemory(path),
+                    new EnvironmentVariablePathInMemory(path),
                     new BackupFake(SaveBackupResult.Cancel)
-                ).Path
+                ).UserPath
             );
         }
 
@@ -43,6 +44,7 @@ namespace PathEditor.UnitTests
         {
             var evpim = new EnvironmentVariablePathInMemory();
             new MainWindowViewModel(
+                new EnvironmentVariablePathInMemory(),
                 evpim,
                 new BackupFake(SaveBackupResult.Done)
             ).SaveCommand.Execute(formatedPath);

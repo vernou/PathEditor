@@ -30,6 +30,7 @@ namespace PathEditor.App
             InitializeComponent();
             DataContext = new MainWindowViewModel(
                 new EnvironmentVariablePathInMemory(),
+                new EnvironmentVariablePathInMemory(),
                 new BackupProcess(
                     new BackupFile(new AskFile()),
                     new QuestionToBackupDialog()

@@ -2,23 +2,26 @@ using System;
 using System.Linq;
 using System.Windows.Input;
 using PathEditor.Core.Backup;
-using PathEditor.Core.Dialog;
 using PathEditor.Core.EnvironmentVariablePath;
 
 namespace PathEditor.Core
 {
     public sealed class MainWindowViewModel
     {
-        private readonly IEnvironmentVariablePath _environmentVariablePath;
+        private readonly IEnvironmentVariablePath _systemEnvironmentVariablePath;
+        private readonly IEnvironmentVariablePath _userEnvironmentVariablePath;
         private readonly IBackup _backup;
 
-        public MainWindowViewModel(IEnvironmentVariablePath environmentVariablePath, IBackup backup)
+        public MainWindowViewModel(IEnvironmentVariablePath systemEnvironmentVariablePath, IEnvironmentVariablePath userEnvironmentVariablePath, IBackup backup)
         {
-            _environmentVariablePath = environmentVariablePath;
+            _systemEnvironmentVariablePath = systemEnvironmentVariablePath;
+            _userEnvironmentVariablePath = userEnvironmentVariablePath;
             _backup = backup;
         }
 
-        public string Path => FormatPath(_environmentVariablePath.Value);
+        public string SystemPath => FormatPath(_systemEnvironmentVariablePath.Value);
+        public string UserPath => FormatPath(_userEnvironmentVariablePath.Value);
+
 
         public ICommand SaveCommand => new RelayCommand(Save);
 
@@ -26,7 +29,7 @@ namespace PathEditor.Core
         {
             if (o is string formated)
             {
-                switch (_backup.Save(_environmentVariablePath.Value))
+                switch (_backup.Save(_userEnvironmentVariablePath.Value))
                 {
                     case SaveBackupResult.Done:
                         break;
@@ -37,7 +40,7 @@ namespace PathEditor.Core
                 }
 
                 var raw = ParsePath(formated);
-                _environmentVariablePath.Value = raw;
+                _userEnvironmentVariablePath.Value = raw;
             }
         }
 

@@ -11,7 +11,14 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBox Name="PathTextBox" Text="{Binding Path, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown"/>
+        <TabControl>
+            <TabItem Header="System">
+                <TextBox Name="SystemPathTextBox" Text="{Binding SystemPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown"/>
+            </TabItem>
+            <TabItem Header="User">
+                <TextBox Name="UserPathTextBox" Text="{Binding UserPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown"/>
+            </TabItem>
+        </TabControl>
         <Button Grid.Row="1" Command="{Binding SaveCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=PathTextBox, Path=Text}">Save</Button>
     </Grid>
 </Window>
