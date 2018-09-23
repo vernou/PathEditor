@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <TabControl>
             <TabItem Header="System">
-                <TextBox Name="SystemPathTextBox" Text="{Binding SystemPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown"/>
+                <TextBox Name="SystemPathTextBox" Text="{Binding SystemPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown" IsReadOnly="{Binding AdministratorSystem}"/>
             </TabItem>
             <TabItem Header="User">
                 <TextBox Name="UserPathTextBox" Text="{Binding UserPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown"/>

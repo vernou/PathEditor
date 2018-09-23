@@ -29,11 +29,12 @@ namespace PathEditor.App
         {
             InitializeComponent();
             DataContext = new MainWindowViewModel(
-                new EnvironmentVariablePathInMemory(),
+                new EnvironmentVariablePathSystem(),
                 new BackupProcess(
                     new BackupFile(new AskFile()),
                     new QuestionToBackupDialog()
-                )
+                ),
+                new UserSystem()
             );
         }
 

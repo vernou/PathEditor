@@ -7,13 +7,13 @@ namespace PathEditor.Core.EnvironmentVariablePath
         public string System
         {
             get => Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine);
-            set => throw new NotImplementedException();
+            set => Environment.SetEnvironmentVariable("Path", value, EnvironmentVariableTarget.Machine);
         }
 
         public string User
         {
             get => Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.User);
-            set => throw new NotImplementedException();
+            set => Environment.SetEnvironmentVariable("Path", value, EnvironmentVariableTarget.User);
         }
     }
 }
