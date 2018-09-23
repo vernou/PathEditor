@@ -12,12 +12,15 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TabControl>
+        <TabControl SelectionChanged="Selector_OnSelectionChanged">
             <TabItem Header="System">
                 <TextBox Name="SystemPathTextBox" Text="{Binding SystemPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown" IsReadOnly="{Binding AdministratorSystem}"/>
             </TabItem>
             <TabItem Header="User">
                 <TextBox Name="UserPathTextBox" Text="{Binding UserPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown"/>
+            </TabItem>
+            <TabItem x:Name="ProcessTab" Header="Process">
+                <TextBox Name="ProcessPathTextBox" AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True"/>
             </TabItem>
         </TabControl>
         <Button Grid.Row="1" Command="{Binding SaveCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=Window}">Save</Button>
