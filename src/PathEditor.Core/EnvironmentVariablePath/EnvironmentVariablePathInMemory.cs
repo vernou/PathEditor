@@ -3,14 +3,20 @@
     public sealed class EnvironmentVariablePathInMemory : IEnvironmentVariablePath
     {
         public EnvironmentVariablePathInMemory() :
-            this(@"C:\TMP\Path1;C:\TMP\Path2;C:\TMP\Path3;")
+            this(@"C:\System\Path1;C:\System\Path2;C:\System\Path3;", @"C:\User\Path1;C:\User\Path2;C:\User\Path3;")
         { }
 
-        public EnvironmentVariablePathInMemory(string paths)
+        public EnvironmentVariablePathInMemory(string user) :
+            this(@"C:\System\Path1;C:\System\Path2;C:\System\Path3;", user)
+        { }
+
+        public EnvironmentVariablePathInMemory(string system, string user)
         {
-            Value = paths;
+            System = system;
+            User = user;
         }
 
-        public string Value { get; set; }
+        public string System { get; set; }
+        public string User { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace PathEditor.App
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IFormattedEnvironmentVariablePath
     {
         public MainWindow()
         {
@@ -54,5 +54,8 @@ namespace PathEditor.App
                 e.Handled = true;
             }
         }
+
+        string IFormattedEnvironmentVariablePath.System => SystemPathTextBox.Text;
+        string IFormattedEnvironmentVariablePath.User => UserPathTextBox.Text;
     }
 }

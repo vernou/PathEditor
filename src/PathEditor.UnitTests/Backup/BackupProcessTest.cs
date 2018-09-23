@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using PathEditor.Core.Backup;
+﻿using PathEditor.Core.Backup;
 using PathEditor.Core.Dialog;
 using Xunit;
 
@@ -18,21 +14,22 @@ namespace PathEditor.UnitTests.Backup
                 spy,
                 new QuestionToBackupFake(QuestionToBackupResult.YesIWantBackup)
             );
-            Assert.Equal(SaveBackupResult.Done, process.Save("NEW PATH"));
-            Assert.Equal(1, spy.BackupSaved.Count);
-            Assert.Equal("NEW PATH", spy.BackupSaved.First());
+            Assert.Equal(SaveBackupResult.Done, process.Save("NEW SYSTEM PATH", "NEW USER PATH"));
+            Assert.Equal(new[] { "NEW SYSTEM PATH" }, spy.SystemSaved);
+            Assert.Equal(new[] { "NEW USER PATH" }, spy.UserSaved);
         }
 
         [Fact]
-        public void DontWantBackup()
+        public void WithoutBackup()
         {
             var spy = new BackupFake(SaveBackupResult.Done);
             var process = new BackupProcess(
                 spy,
                 new QuestionToBackupFake(QuestionToBackupResult.NoThanks)
             );
-            Assert.Equal(SaveBackupResult.Done, process.Save("NEW PATH"));
-            Assert.Empty(spy.BackupSaved);
+            Assert.Equal(SaveBackupResult.Done, process.Save("NEW SYSTEM PATH", "NEW USER PATH"));
+            Assert.Empty(spy.SystemSaved);
+            Assert.Empty(spy.UserSaved);
         }
 
         [Fact]
@@ -43,8 +40,9 @@ namespace PathEditor.UnitTests.Backup
                 spy,
                 new QuestionToBackupFake(QuestionToBackupResult.Cancel)
             );
-            Assert.Equal(SaveBackupResult.Cancel, process.Save("NEW PATH"));
-            Assert.Empty(spy.BackupSaved);
+            Assert.Equal(SaveBackupResult.Cancel, process.Save("NEW SYSTEM PATH", "NEW USER PATH"));
+            Assert.Empty(spy.SystemSaved);
+            Assert.Empty(spy.UserSaved);
         }
     }
 }

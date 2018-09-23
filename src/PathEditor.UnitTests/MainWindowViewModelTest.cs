@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using PathEditor.Core;
 using PathEditor.Core.Backup;
-using PathEditor.Core.Dialog;
 using PathEditor.Core.EnvironmentVariablePath;
 using Xunit;
 
@@ -13,40 +11,66 @@ namespace PathEditor.UnitTests
     {
         public static IEnumerable<object[]> FormatPathData()
         {
-            yield return new object[] { string.Empty, string.Empty };
-            yield return new object[] { @"C:\TMP\Path1;C:\TMP\Path2;C:\TMP\Path3", $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;{Environment.NewLine}C:\TMP\Path3;" };
-            yield return new object[] { @"C:\TMP\Path1;C:\TMP\Path2;C:\TMP\Path3;", $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;{Environment.NewLine}C:\TMP\Path3;" };
+            yield return new object[] { string.Empty, string.Empty, string.Empty, string.Empty };
+            yield return new object[]
+            {
+                @"C:\System\Path1;C:\System\Path2;C:\System\Path3",
+                @"C:\User\Path1;C:\User\Path2;C:\User\Path3",
+                $@"C:\System\Path1;{Environment.NewLine}C:\System\Path2;{Environment.NewLine}C:\System\Path3;",
+                $@"C:\User\Path1;{Environment.NewLine}C:\User\Path2;{Environment.NewLine}C:\User\Path3;"
+            };
+            yield return new object[]
+            {
+                @"C:\System\Path1;C:\System\Path2;C:\System\Path3;",
+                @"C:\User\Path1;C:\User\Path2;C:\User\Path3;",
+                $@"C:\System\Path1;{Environment.NewLine}C:\System\Path2;{Environment.NewLine}C:\System\Path3;",
+                $@"C:\User\Path1;{Environment.NewLine}C:\User\Path2;{Environment.NewLine}C:\User\Path3;"
+            };
         }
 
         [Theory]
         [MemberData(nameof(FormatPathData))]
-        public void FormatPath(string path, string formatedPath)
+        public void FormatPath(string system, string user, string expectedSystem, string expectedUser)
         {
-            Assert.Equal(formatedPath,
-                new MainWindowViewModel(
-                    new EnvironmentVariablePathInMemory(path),
-                    new BackupFake(SaveBackupResult.Cancel)
-                ).Path
+            var mainWindowViewModel = new MainWindowViewModel(
+                new EnvironmentVariablePathInMemory(system, user),
+                new BackupFake(SaveBackupResult.Cancel)
             );
+            Assert.Equal(expectedSystem, mainWindowViewModel.SystemPath);
+            Assert.Equal(expectedUser, mainWindowViewModel.UserPath);
         }
 
         public static IEnumerable<object[]> SaveData()
         {
-            yield return new object[] { string.Empty, string.Empty };
-            yield return new object[] { $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;", @"C:\TMP\Path1;C:\TMP\Path2;" };
-            yield return new object[] { $@"C:\TMP\Path1;{Environment.NewLine}C:\TMP\Path2;{Environment.NewLine}C:\TMP\Path3", @"C:\TMP\Path1;C:\TMP\Path2;C:\TMP\Path3;" };
+            yield return new object[] { string.Empty, string.Empty, string.Empty, string.Empty };
+            yield return new object[]
+            {
+                $@"C:\System\Path1;{Environment.NewLine}C:\System\Path2;",
+                $@"C:\User\Path1;{Environment.NewLine}C:\User\Path2;",
+                @"C:\System\Path1;C:\System\Path2;",
+                @"C:\User\Path1;C:\User\Path2;"
+            };
+            yield return new object[]
+            {
+                
+                $@"C:\System\Path1;{Environment.NewLine}C:\System\Path2;{Environment.NewLine}C:\System\Path3",
+                $@"C:\User\Path1;{Environment.NewLine}C:\User\Path2;{Environment.NewLine}C:\User\Path3",
+                @"C:\System\Path1;C:\System\Path2;C:\System\Path3;",
+                @"C:\User\Path1;C:\User\Path2;C:\User\Path3;"
+            };
         }
 
         [Theory]
         [MemberData(nameof(SaveData))]
-        public void Save(string formatedPath, string path)
+        public void Save(string formattedSystem, string formattedUser, string expectedSystem, string expectedUser)
         {
-            var evpim = new EnvironmentVariablePathInMemory();
+            var path = new EnvironmentVariablePathInMemory();
             new MainWindowViewModel(
-                evpim,
+                path,
                 new BackupFake(SaveBackupResult.Done)
-            ).SaveCommand.Execute(formatedPath);
-            Assert.Equal(path, evpim.Value);
+            ).SaveCommand.Execute(new FormattedEnvironmentVariablePathFake(formattedSystem, formattedUser));
+            Assert.Equal(expectedSystem, path.System);
+            Assert.Equal(expectedUser, path.User);
         }
     }
 }

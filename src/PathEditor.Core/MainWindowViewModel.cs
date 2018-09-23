@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Windows.Input;
 using PathEditor.Core.Backup;
-using PathEditor.Core.Dialog;
 using PathEditor.Core.EnvironmentVariablePath;
 
 namespace PathEditor.Core
@@ -18,15 +17,17 @@ namespace PathEditor.Core
             _backup = backup;
         }
 
-        public string Path => FormatPath(_environmentVariablePath.Value);
+        public string SystemPath => FormatPath(_environmentVariablePath.System);
+        public string UserPath => FormatPath(_environmentVariablePath.User);
+
 
         public ICommand SaveCommand => new RelayCommand(Save);
 
         private void Save(object o)
         {
-            if (o is string formated)
+            if (o is IFormattedEnvironmentVariablePath formatted)
             {
-                switch (_backup.Save(_environmentVariablePath.Value))
+                switch (_backup.Save(_environmentVariablePath.System, _environmentVariablePath.User))
                 {
                     case SaveBackupResult.Done:
                         break;
@@ -36,8 +37,8 @@ namespace PathEditor.Core
                         throw new ArgumentOutOfRangeException();
                 }
 
-                var raw = ParsePath(formated);
-                _environmentVariablePath.Value = raw;
+                _environmentVariablePath.System = ParsePath(formatted.System);
+                _environmentVariablePath.User = ParsePath(formatted.User);
             }
         }
 

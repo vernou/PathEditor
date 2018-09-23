@@ -14,14 +14,14 @@ namespace PathEditor.Core.Backup
             _questionToBackup = questionToBackup;
         }
 
-        public SaveBackupResult Save(string environmentVariablePath)
+        public SaveBackupResult Save(string system, string user)
         {
             switch (_questionToBackup.Ask())
             {
                 case QuestionToBackupResult.NoThanks:
                     return SaveBackupResult.Done;
                 case QuestionToBackupResult.YesIWantBackup:
-                    return _backup.Save(environmentVariablePath);
+                    return _backup.Save(system, user);
                 case QuestionToBackupResult.Cancel:
                     return SaveBackupResult.Cancel;
                 default:
