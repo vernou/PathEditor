@@ -25,11 +25,14 @@ namespace PathEditor.App
     /// </summary>
     public partial class MainWindow : Window, IFormattedEnvironmentVariablePath
     {
+        private FormattedProcessEnvironmentVariablePath _formattedProcess;
+
         public MainWindow()
         {
             InitializeComponent();
+            _formattedProcess = new FormattedProcessEnvironmentVariablePath(this);
             DataContext = new MainWindowViewModel(
-                new EnvironmentVariablePathSystem(),
+                new EnvironmentVariablePathInMemory(), 
                 new BackupProcess(
                     new BackupFile(new AskFile()),
                     new QuestionToBackupDialog()
@@ -58,5 +61,16 @@ namespace PathEditor.App
 
         string IFormattedEnvironmentVariablePath.System => SystemPathTextBox.Text;
         string IFormattedEnvironmentVariablePath.User => UserPathTextBox.Text;
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is TabControl tabControl && tabControl.SelectedItem == ProcessTab)
+                RefreshProcessTexBox();
+        }
+
+        private void RefreshProcessTexBox()
+        {
+            ProcessPathTextBox.Text = _formattedProcess.Value;
+        }
     }
 }
