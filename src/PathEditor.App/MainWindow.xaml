@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PathEditor.App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        x:Name="Window">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -19,6 +20,6 @@
                 <TextBox Name="UserPathTextBox" Text="{Binding UserPath, Mode=OneTime}" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="TextBox_OnTextChanged" KeyDown="TextBox_OnKeyDown"/>
             </TabItem>
         </TabControl>
-        <Button Grid.Row="1" Command="{Binding SaveCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=PathTextBox, Path=Text}">Save</Button>
+        <Button Grid.Row="1" Command="{Binding SaveCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=Window}">Save</Button>
     </Grid>
 </Window>

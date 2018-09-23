@@ -2,6 +2,7 @@
 {
     public interface IEnvironmentVariablePath
     {
-        string Value { get; set; }
+        string System { get; set; }
+        string User { get; set; }
     }
 }

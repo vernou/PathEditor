@@ -23,13 +23,12 @@ namespace PathEditor.App
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IFormattedEnvironmentVariablePath
     {
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new MainWindowViewModel(
-                new EnvironmentVariablePathInMemory(),
                 new EnvironmentVariablePathInMemory(),
                 new BackupProcess(
                     new BackupFile(new AskFile()),
@@ -55,5 +54,8 @@ namespace PathEditor.App
                 e.Handled = true;
             }
         }
+
+        string IFormattedEnvironmentVariablePath.System => SystemPathTextBox.Text;
+        string IFormattedEnvironmentVariablePath.User => UserPathTextBox.Text;
     }
 }

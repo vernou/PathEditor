@@ -8,28 +8,26 @@ namespace PathEditor.Core
 {
     public sealed class MainWindowViewModel
     {
-        private readonly IEnvironmentVariablePath _systemEnvironmentVariablePath;
-        private readonly IEnvironmentVariablePath _userEnvironmentVariablePath;
+        private readonly IEnvironmentVariablePath _environmentVariablePath;
         private readonly IBackup _backup;
 
-        public MainWindowViewModel(IEnvironmentVariablePath systemEnvironmentVariablePath, IEnvironmentVariablePath userEnvironmentVariablePath, IBackup backup)
+        public MainWindowViewModel(IEnvironmentVariablePath environmentVariablePath, IBackup backup)
         {
-            _systemEnvironmentVariablePath = systemEnvironmentVariablePath;
-            _userEnvironmentVariablePath = userEnvironmentVariablePath;
+            _environmentVariablePath = environmentVariablePath;
             _backup = backup;
         }
 
-        public string SystemPath => FormatPath(_systemEnvironmentVariablePath.Value);
-        public string UserPath => FormatPath(_userEnvironmentVariablePath.Value);
+        public string SystemPath => FormatPath(_environmentVariablePath.System);
+        public string UserPath => FormatPath(_environmentVariablePath.User);
 
 
         public ICommand SaveCommand => new RelayCommand(Save);
 
         private void Save(object o)
         {
-            if (o is string formated)
+            if (o is IFormattedEnvironmentVariablePath formatted)
             {
-                switch (_backup.Save(_userEnvironmentVariablePath.Value))
+                switch (_backup.Save(_environmentVariablePath.System, _environmentVariablePath.User))
                 {
                     case SaveBackupResult.Done:
                         break;
@@ -39,8 +37,8 @@ namespace PathEditor.Core
                         throw new ArgumentOutOfRangeException();
                 }
 
-                var raw = ParsePath(formated);
-                _userEnvironmentVariablePath.Value = raw;
+                _environmentVariablePath.System = ParsePath(formatted.System);
+                _environmentVariablePath.User = ParsePath(formatted.User);
             }
         }
 

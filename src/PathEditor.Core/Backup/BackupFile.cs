@@ -1,4 +1,5 @@
-﻿using PathEditor.Core.Dialog;
+﻿using System;
+using PathEditor.Core.Dialog;
 
 namespace PathEditor.Core.Backup
 {
@@ -11,13 +12,18 @@ namespace PathEditor.Core.Backup
             _askFile = askFile;
         }
 
-        public SaveBackupResult Save(string environmentVariablePath)
+        public SaveBackupResult Save(string system, string user)
         {
             var file = _askFile.File();
             if (file == string.Empty)
                 return SaveBackupResult.Cancel;
-            System.IO.File.WriteAllText(file, environmentVariablePath);
+            System.IO.File.WriteAllText(file, Text(system, user));
             return SaveBackupResult.Done;
+        }
+
+        private string Text(string system, string user)
+        {
+            return $@"#System{Environment.NewLine}{system}{Environment.NewLine}#User{Environment.NewLine}{user}";
         }
     }
 }
