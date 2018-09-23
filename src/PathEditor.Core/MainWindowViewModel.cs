@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 using PathEditor.Core.Backup;
 using PathEditor.Core.EnvironmentVariablePath;
+using PathEditor.Core.User;
 
 namespace PathEditor.Core
 {
@@ -10,16 +11,18 @@ namespace PathEditor.Core
     {
         private readonly IEnvironmentVariablePath _environmentVariablePath;
         private readonly IBackup _backup;
+        private readonly IUser _user;
 
-        public MainWindowViewModel(IEnvironmentVariablePath environmentVariablePath, IBackup backup)
+        public MainWindowViewModel(IEnvironmentVariablePath environmentVariablePath, IBackup backup, IUser user)
         {
             _environmentVariablePath = environmentVariablePath;
             _backup = backup;
+            _user = user;
         }
 
         public string SystemPath => FormatPath(_environmentVariablePath.System);
         public string UserPath => FormatPath(_environmentVariablePath.User);
-
+        public bool SystemIsReadOnly => !_user.IsAdministrator;
 
         public ICommand SaveCommand => new RelayCommand(Save);
 
@@ -36,8 +39,8 @@ namespace PathEditor.Core
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
-                _environmentVariablePath.System = ParsePath(formatted.System);
+                if(_user.IsAdministrator)
+                    _environmentVariablePath.System = ParsePath(formatted.System);
                 _environmentVariablePath.User = ParsePath(formatted.User);
             }
         }
@@ -51,11 +54,11 @@ namespace PathEditor.Core
             return string.Join(Environment.NewLine, raw.Split(';').Select(s => s + ";").ToArray());
         }
 
-        private string ParsePath(string formated)
+        private string ParsePath(string formatted)
         {
-            if (formated == string.Empty)
+            if (formatted == string.Empty)
                 return string.Empty;
-            var raw = formated.Replace(Environment.NewLine, string.Empty);
+            var raw = formatted.Replace(Environment.NewLine, string.Empty);
             if (raw.Last() != ';')
                 raw += ';';
             return raw;
